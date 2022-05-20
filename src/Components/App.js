@@ -1,9 +1,11 @@
 import './App.css';
+import Main from "./Main.js";
 
 function App() {
     return (
         <div className="App">
-            <p>Test</p>
+            <h1>Dev helper</h1>
+            <Main/>
         </div>
     );
 }

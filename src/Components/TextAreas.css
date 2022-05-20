@@ -1,0 +1,4 @@
+#textAreas {
+    display: flex;
+    flex-direction: column;
+}
