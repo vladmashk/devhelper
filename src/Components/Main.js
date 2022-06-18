@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import "./Main.css"
-import TextAreas from "./TextAreas.js";
-import Sidebar from "./Sidebar.js";
+import TextAreas from "./listHelper/TextAreas.js";
+import Sidebar, {outputType} from "./listHelper/Sidebar.js";
 
 function Main(props) {
 
@@ -10,13 +10,36 @@ function Main(props) {
     const [output, setOutput] = useState("")
 
     /**
-     * @param {{separator: string, quoteType: string, outputNewlines: boolean}} settings
+     * @param {{separator: string, quoteType: string, outputNewlines: string, rows: number}} settings
      */
     function convert(settings) {
         if (input === "") return;
         let items = input.split(settings.separator)
         const quote = settings.quoteType === "single" ? "'" : '"'
-        setOutput(items.map(i => quote + i.trim().replace(/\n/g, "") + quote).join("," + (settings.outputNewlines ? "\n" : " ")))
+        items = items.map(i => quote + i.trim().replace(/\n/g, "") + quote)
+        switch (settings.outputNewlines) {
+            case outputType.NO_NEWLINES:
+                items = items.join(", ")
+                break
+            case outputType.NEWLINES:
+                items = items.join(",\n")
+                break
+            case outputType.ROWS:
+                items = items.reduce((previous, current, index) => {
+                    if (index === items.length - 1) {
+                        return previous + current
+                    } else if ((index + 1) % settings.rows === 0) {
+                        return previous + current + ",\n"
+                    } else {
+                        return previous + current + ", "
+                    }
+                }, "")
+                break
+            default:
+                items = items.join(", ")
+                break
+        }
+        setOutput(items)
     }
 
     return (
