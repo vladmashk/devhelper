@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/devhelper/static/css/main.fa21ffc7.css",
+    "main.js": "/devhelper/static/js/main.d3d789d4.js",
+    "index.html": "/devhelper/index.html",
+    "main.fa21ffc7.css.map": "/devhelper/static/css/main.fa21ffc7.css.map",
+    "main.d3d789d4.js.map": "/devhelper/static/js/main.d3d789d4.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.fa21ffc7.css",
+    "static/js/main.d3d789d4.js"
+  ]
+}
