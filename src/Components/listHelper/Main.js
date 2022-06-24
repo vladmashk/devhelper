@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
 import "./Main.css"
-import TextAreas from "./listHelper/TextAreas.js";
-import Sidebar, {outputType} from "./listHelper/Sidebar.js";
+import TextAreas from "./TextAreas.js";
+import Sidebar, {outputType} from "./Sidebar.js";
+import Presets from "./Presets.js";
 
 function Main(props) {
 
@@ -42,8 +43,16 @@ function Main(props) {
         setOutput(items)
     }
 
+    /**
+     * @param {string} input
+     */
+    function presetInput(input) {
+        setInput(input)
+    }
+
     return (
         <div id="main">
+            <Presets setInput={presetInput}/>
             <TextAreas input={input} setInput={setInput} output={output}/>
             <Sidebar convert={convert}/>
         </div>
