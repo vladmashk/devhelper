@@ -26,11 +26,12 @@ function ListHelper(props) {
     const [macro, setMacro] = useState("")
 
     /**
-     * @param {{separator: string, quoteType: string, outputNewlines: string, rows: number}} settings
+     * @param {{inputSeparator: string, quoteType: string, outputNewlines: string, rows: number, outputSeparator: string}} settings
      */
     function convert(settings) {
         if (input === "") return;
-        let items = input.split(settings.separator)
+        let outputSep = settings.outputSeparator;
+        let items = input.split(settings.inputSeparator)
         let quote;
         switch (settings.quoteType) {
             case "single":
@@ -49,24 +50,24 @@ function ListHelper(props) {
         }
         switch (settings.outputNewlines) {
             case outputType.NO_NEWLINES:
-                items = items.join(", ")
+                items = items.join(outputSep + " ")
                 break
             case outputType.NEWLINES:
-                items = items.join(",\n")
+                items = items.join(outputSep + "\n")
                 break
             case outputType.ROWS:
                 items = items.reduce((previous, current, index) => {
                     if (index === items.length - 1) {
                         return previous + current
                     } else if ((index + 1) % settings.rows === 0) {
-                        return previous + current + ",\n"
+                        return previous + current + outputSep + "\n"
                     } else {
-                        return previous + current + ", "
+                        return previous + current + outputSep + " "
                     }
                 }, "")
                 break
             default:
-                items = items.join(", ")
+                items = items.join(outputSep + " ")
                 break
         }
         setOutput(items)

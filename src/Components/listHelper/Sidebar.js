@@ -10,7 +10,9 @@ export const outputType = {
 
 function Sidebar(props) {
 
-    const [separator, setSeparator] = useState(",")
+    const [inputSeparator, setInputSeparator] = useState(",")
+
+    const [outputSeparator, setOutputSeparator] = useState(",")
 
     const [ignoreNewlines, setIgnoreNewlines] = useState(true)
 
@@ -22,7 +24,7 @@ function Sidebar(props) {
 
     function separateOnNewlines(e) {
         if (e.target.checked) {
-            setSeparator("\n")
+            setInputSeparator("\n")
             setIgnoreNewlines(false)
         } else {
             setIgnoreNewlines(true)
@@ -37,7 +39,7 @@ function Sidebar(props) {
         <div id="sidebar">
             <div className="settingsGroup">
                 <Setting label="Input separator: ">
-                    {ignoreNewlines && <input type="text" value={separator} onChange={e => setSeparator(e.target.value)} maxLength={1} size={1}/>}
+                    {ignoreNewlines && <input className="shortInput" type="text" value={inputSeparator} onChange={e => setInputSeparator(e.target.value)} maxLength={1} size={1}/>}
                     <label> Separate on newlines: </label><input type="checkbox" defaultChecked={false} onChange={separateOnNewlines}/>
                 </Setting>
                 {ignoreNewlines && <span className="setting">Don't worry about newlines in input</span>}
@@ -63,7 +65,10 @@ function Sidebar(props) {
                     <label htmlFor="rows">Output in rows of </label>
                     <input type="number" value={rows} onChange={e => setRows(parseInt(e.target.value))} min={2} max={100}/>
                 </Setting>
-                <button onClick={() => props.convert({separator, quoteType, outputNewlines, rows})}>Convert</button>
+                <Setting label="Output separator: ">
+                    <input className="shortInput" type="text" value={outputSeparator} onChange={e => setOutputSeparator(e.target.value)} maxLength={1}/>
+                </Setting>
+                <button onClick={() => props.convert({inputSeparator, quoteType, outputNewlines, rows, outputSeparator})}>Convert</button>
             </div>
         </div>
     );

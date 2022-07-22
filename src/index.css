@@ -13,3 +13,7 @@ h1 {
 body {
     font-family: sans-serif;
 }
+
+.shortInput {
+    width: 2ch;
+}
