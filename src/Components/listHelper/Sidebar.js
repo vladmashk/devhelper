@@ -47,6 +47,7 @@ function Sidebar(props) {
                     <select value={quoteType} onChange={e => setQuoteType(e.target.value)}>
                         <option value="single">Single</option>
                         <option value="double">Double</option>
+                        <option value="none">None</option>
                     </select>
                 </Setting>
                 <Setting>

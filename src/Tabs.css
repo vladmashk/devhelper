@@ -1,0 +1,16 @@
+#tabs {
+    display: flex;
+    justify-content: center;
+    background-color: #ececec;
+}
+
+.tab {
+    padding: 5px 5px 5px 5px;
+    margin: 2px 3px 2px 3px;
+    background-color: #b6b5b5;
+    cursor: pointer;
+}
+
+.tab:hover {
+    background-color: gray;
+}

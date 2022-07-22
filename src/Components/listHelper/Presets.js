@@ -1,7 +1,10 @@
 import React from 'react';
 import './Presets.css'
+import {macroChar} from "./ListHelper.js";
 
 function Presets(props) {
+
+
 
     function alphabetLower() {
         props.setInput("a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z")
@@ -21,6 +24,14 @@ function Presets(props) {
             <button className="preset" onClick={alphabetLower}>Alphabet - lower case</button>
             <button className="preset" onClick={alphabetUpper}>Alphabet - upper case</button>
             <button className="preset" onClick={decimals}>Decimals</button>
+            <br/>
+            <span className="preset">Macro</span>
+            <input className="full-width" type="text" value={props.macro} onChange={e => props.setMacro(e.target.value)}/>
+            <span className="help">
+                Use {macroChar} as insertion char. For example: using '{`<span>${macroChar}</span>`}' will surround every
+                item from the input with span tags in the output. If there is a {macroChar} character in the macro that
+                shouldn't be replaced, escape it with a backslash: \{macroChar}. Leave blank if not necessary.
+            </span>
         </div>
     );
 }
