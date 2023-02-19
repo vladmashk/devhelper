@@ -50,7 +50,7 @@ function ListHelper(props) {
         }
         switch (settings.outputNewlines) {
             case outputType.NO_NEWLINES:
-                items = items.join(outputSep + " ")
+                items = items.join(outputSep)
                 break
             case outputType.NEWLINES:
                 items = items.join(outputSep + "\n")
@@ -62,12 +62,12 @@ function ListHelper(props) {
                     } else if ((index + 1) % settings.rows === 0) {
                         return previous + current + outputSep + "\n"
                     } else {
-                        return previous + current + outputSep + " "
+                        return previous + current + outputSep
                     }
                 }, "")
                 break
             default:
-                items = items.join(outputSep + " ")
+                items = items.join(outputSep)
                 break
         }
         setOutput(items)

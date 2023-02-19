@@ -12,7 +12,7 @@ function Sidebar(props) {
 
     const [inputSeparator, setInputSeparator] = useState(",")
 
-    const [outputSeparator, setOutputSeparator] = useState(",")
+    const [outputSeparator, setOutputSeparator] = useState(", ")
 
     const [ignoreNewlines, setIgnoreNewlines] = useState(true)
 
@@ -39,7 +39,7 @@ function Sidebar(props) {
         <div id="sidebar">
             <div className="settingsGroup">
                 <Setting label="Input separator: ">
-                    {ignoreNewlines && <input className="shortInput" type="text" value={inputSeparator} onChange={e => setInputSeparator(e.target.value)} maxLength={1} size={1}/>}
+                    {ignoreNewlines && <input className="shortInput" type="text" value={inputSeparator} onChange={e => setInputSeparator(e.target.value)}/>}
                     <label> Separate on newlines: </label><input type="checkbox" defaultChecked={false} onChange={separateOnNewlines}/>
                 </Setting>
                 {ignoreNewlines && <span className="setting">Don't worry about newlines in input</span>}
@@ -66,7 +66,7 @@ function Sidebar(props) {
                     <input type="number" value={rows} onChange={e => setRows(parseInt(e.target.value))} min={2} max={100}/>
                 </Setting>
                 <Setting label="Output separator: ">
-                    <input className="shortInput" type="text" value={outputSeparator} onChange={e => setOutputSeparator(e.target.value)} maxLength={1}/>
+                    <input className="shortInput" type="text" value={outputSeparator} onChange={e => setOutputSeparator(e.target.value)}/>
                 </Setting>
                 <button onClick={() => props.convert({inputSeparator, quoteType, outputNewlines, rows, outputSeparator})}>Convert</button>
             </div>
