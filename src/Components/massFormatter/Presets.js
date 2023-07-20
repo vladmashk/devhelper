@@ -1,6 +1,6 @@
 import React from 'react';
 import './Presets.css'
-import {macroChar} from "./ListHelper.js";
+import {macroChar} from "./MassFormatter.js";
 
 function Presets(props) {
 

@@ -1,16 +1,15 @@
 import './App.css';
-import ListHelper from "./Components/listHelper/ListHelper.js";
+import MassFormatter from "./Components/massFormatter/MassFormatter.js";
 import {useState} from "react";
 import Tabs from "./Tabs.js";
 
 export const tabs = {
-    LIST_HELPER: "lh",
-    MACRO: "m"
+    MASS_FORMATTER: "mass formatter"
 }
 
 function App() {
 
-    const [shownTab, setShownTab] = useState(tabs.LIST_HELPER);
+    const [shownTab, setShownTab] = useState(tabs.MASS_FORMATTER);
 
     function wrap(shownTab) {
         return (
@@ -22,8 +21,8 @@ function App() {
         )
     }
 
-    if (shownTab === tabs.LIST_HELPER)  {
-        return wrap(<ListHelper/>);
+    if (shownTab === tabs.MASS_FORMATTER)  {
+        return wrap(<MassFormatter/>);
     } else {
         return "error";
     }

@@ -5,7 +5,7 @@ import './Tabs.css'
 function Tabs(props) {
     return (
         <div id="tabs">
-            <span className="tab" onClick={() => props.setShownTab(tabs.LIST_HELPER)}>List helper</span>
+            <span className="tab" onClick={() => props.setShownTab(tabs.MASS_FORMATTER)}>Mass Formatter</span>
         </div>
     );
 }

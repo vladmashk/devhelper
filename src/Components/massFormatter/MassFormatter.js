@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import "./ListHelper.css"
+import "./MassFormatter.css"
 import TextAreas from "./TextAreas.js";
 import Sidebar, {outputType} from "./Sidebar.js";
 import Presets from "./Presets.js";
@@ -17,7 +17,7 @@ export const macroChar = "%"
 //     }
 // }
 
-function ListHelper(props) {
+function MassFormatter(props) {
 
     const [input, setInput] = useState("")
 
@@ -26,12 +26,21 @@ function ListHelper(props) {
     const [macro, setMacro] = useState("")
 
     /**
-     * @param {{inputSeparator: string, quoteType: string, outputNewlines: string, rows: number, outputSeparator: string}} settings
+     * @param {{inputSeparator: string, inputRegex: boolean, quoteType: string, outputNewlines: string, rows: number, outputSeparator: string}} settings
      */
     function convert(settings) {
         if (input === "") return;
         let outputSep = settings.outputSeparator;
-        let items = input.split(settings.inputSeparator)
+        let items;
+        try {
+            items = input.split(settings.inputRegex ? new RegExp(settings.inputSeparator) : settings.inputSeparator)
+        } catch (error) {
+            if (error instanceof SyntaxError) {
+                return
+            } else {
+                throw error
+            }
+        }
         let quote;
         switch (settings.quoteType) {
             case "single":
@@ -46,7 +55,7 @@ function ListHelper(props) {
         }
         items = items.map(i => quote + i.trim().replace(/\n/g, "") + quote)
         if (macro && macro.includes(macroChar)) {
-            items = items.map(item => macro.replaceAll(/(?<!\\)%/g, item))
+            items = items.map(item => macro.replaceAll(/(?<!\\)%/g, item).replaceAll("\\n", "\n"))
         }
         switch (settings.outputNewlines) {
             case outputType.NO_NEWLINES:
@@ -84,9 +93,9 @@ function ListHelper(props) {
         <div id="main">
             <Presets setInput={presetInput} macro={macro} setMacro={setMacro}/>
             <TextAreas input={input} setInput={setInput} output={output}/>
-            <Sidebar convert={convert}/>
+            <Sidebar input={input} setInput={setInput} macro={macro} output={output} convert={convert}/>
         </div>
     );
 }
 
-export default ListHelper;
+export default MassFormatter;

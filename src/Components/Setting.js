@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 
 function Setting(props) {
     return (
-        <span className="setting">
+        <span className="setting" style={props.style}>
             <label>{props.label}</label>
             {props.children}
         </span>
@@ -12,7 +12,8 @@ function Setting(props) {
 }
 
 Setting.propTypes = {
-    label: PropTypes.string
+    label: PropTypes.string,
+    style: PropTypes.object
 }
 
 export default Setting;

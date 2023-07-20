@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import "./Sidebar.css"
 import Setting from "../Setting.js";
 
@@ -12,6 +12,8 @@ function Sidebar(props) {
 
     const [inputSeparator, setInputSeparator] = useState(",")
 
+    const [inputRegex, setInputRegex] = useState(false)
+
     const [outputSeparator, setOutputSeparator] = useState(", ")
 
     const [ignoreNewlines, setIgnoreNewlines] = useState(true)
@@ -22,31 +24,69 @@ function Sidebar(props) {
 
     const [rows, setRows] = useState(5)
 
+    useEffect(() => {
+        convert()
+    }, [inputSeparator, inputRegex, outputSeparator, quoteType, outputNewlines, rows, props.input, props.macro])
+
+    function changeInputSeparator(e) {
+        setInputSeparator(e.target.value)
+    }
+
+    function changeInputRegex(e) {
+        setInputRegex(e.target.checked)
+    }
+
     function separateOnNewlines(e) {
         if (e.target.checked) {
             setInputSeparator("\n")
             setIgnoreNewlines(false)
         } else {
+            setInputSeparator(",")
             setIgnoreNewlines(true)
         }
+    }
+
+    function clear() {
+        props.setInput("")
+    }
+
+    function changeQuoteType(e) {
+        setQuoteType(e.target.value)
     }
 
     function radioChange(e) {
         setOutputNewlines(e.target.value)
     }
 
+    function changeOutputSeparator(e) {
+        setOutputSeparator(e.target.value)
+    }
+
+    function convert() {
+        props.convert({inputSeparator, inputRegex, quoteType, outputNewlines, rows, outputSeparator})
+    }
+
+    function copy() {
+        window.navigator.clipboard.writeText(props.output)
+    }
+
     return (
         <div id="sidebar">
             <div className="settingsGroup">
-                <Setting label="Input separator: ">
-                    {ignoreNewlines && <input className="shortInput" type="text" value={inputSeparator} onChange={e => setInputSeparator(e.target.value)}/>}
-                    <label> Separate on newlines: </label><input type="checkbox" defaultChecked={false} onChange={separateOnNewlines}/>
+                {ignoreNewlines && 
+                <Setting label="Input separator: " style={{display: "flex", alignItems: "center"}}>
+                    <input className="shortInput" type="text" value={inputSeparator} onChange={changeInputSeparator}/>
+                    <label className='regex'>regex<input type='checkbox' value={inputRegex} onChange={changeInputRegex}/></label>
                 </Setting>
-                {ignoreNewlines && <span className="setting">Don't worry about newlines in input</span>}
+                }
+                <Setting label="Separate on newlines:">
+                    <input type="checkbox" defaultChecked={false} onChange={separateOnNewlines}/>
+                </Setting>
+                <button onClick={clear}>Clear input</button>
             </div>
             <div className="settingsGroup">
                 <Setting label="Output quotes type: ">
-                    <select value={quoteType} onChange={e => setQuoteType(e.target.value)}>
+                    <select value={quoteType} onChange={changeQuoteType}>
                         <option value="single">Single</option>
                         <option value="double">Double</option>
                         <option value="none">None</option>
@@ -63,12 +103,12 @@ function Sidebar(props) {
                 <Setting>
                     <input id="rows" type="radio" name="newlines" value={outputType.ROWS} onChange={radioChange}/>
                     <label htmlFor="rows">Output in rows of </label>
-                    <input type="number" value={rows} onChange={e => setRows(parseInt(e.target.value))} min={2} max={100}/>
+                    <input type="number" value={rows} onChange={e => setRows(parseInt(e.target.value))} min={2} max={100} className='numberInput'/>
                 </Setting>
                 <Setting label="Output separator: ">
-                    <input className="shortInput" type="text" value={outputSeparator} onChange={e => setOutputSeparator(e.target.value)}/>
+                    <input className="shortInput" type="text" value={outputSeparator} onChange={changeOutputSeparator}/>
                 </Setting>
-                <button onClick={() => props.convert({inputSeparator, quoteType, outputNewlines, rows, outputSeparator})}>Convert</button>
+                <button onClick={copy}>Copy output to clipboard</button>
             </div>
         </div>
     );
