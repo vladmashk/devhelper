@@ -1,8 +1,8 @@
 import React from 'react';
-import './Presets.css'
+import './LeftPanel.css'
 import {macroChar} from "./MassFormatter.js";
 
-function Presets(props) {
+function LeftPanel(props) {
 
 
 
@@ -27,13 +27,18 @@ function Presets(props) {
             <br/>
             <span className="preset">Macro</span>
             <input className="full-width" type="text" value={props.macro} onChange={e => props.setMacro(e.target.value)}/>
-            <span className="help">
-                Use {macroChar} as insertion char. For example: using '{`<span>${macroChar}</span>`}' will surround every
-                item from the input with span tags in the output. If there is a {macroChar} character in the macro that
-                shouldn't be replaced, escape it with a backslash: \{macroChar}. Leave blank if not necessary.
-            </span>
+            <div className='helpIcon'>
+                ?
+                <div className="help">
+                    Use {macroChar} as insertion character. For example: using '{`<span>${macroChar}</span>`}' will surround every
+                    item from the input with span tags in the output. If there is a {macroChar} character in the macro that
+                    shouldn't be replaced, escape it with a backslash: \{macroChar}. Leave macro blank if not necessary. Use \i for
+                    a zero-based index. Use \k for a one-based index. Use a backslash to escape a backslash.
+                </div>
+            </div>
+            
         </div>
     );
 }
 
-export default Presets;
+export default LeftPanel;

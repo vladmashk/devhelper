@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import "./MassFormatter.css"
 import TextAreas from "./TextAreas.js";
-import Sidebar, {outputType} from "./Sidebar.js";
-import Presets from "./Presets.js";
+import RightPanel, {outputType} from "./RightPanel.js";
+import LeftPanel from "./LeftPanel.js";
 
 export const macroChar = "%"
 
@@ -29,7 +29,10 @@ function MassFormatter(props) {
      * @param {{inputSeparator: string, inputRegex: boolean, quoteType: string, outputNewlines: string, rows: number, outputSeparator: string}} settings
      */
     function convert(settings) {
-        if (input === "") return;
+        if (input === "") {
+            setOutput("");
+            return;
+        }
         let outputSep = settings.outputSeparator;
         let items;
         try {
@@ -55,7 +58,12 @@ function MassFormatter(props) {
         }
         items = items.map(i => quote + i.trim().replace(/\n/g, "") + quote)
         if (macro && macro.includes(macroChar)) {
-            items = items.map(item => macro.replaceAll(/(?<!\\)%/g, item).replaceAll("\\n", "\n"))
+            items = items.map((item, i) => macro.replaceAll(/(?<!\\)%/g, item) // replace % with item unless preceded by \
+                                                .replaceAll(/(?<!\\)\\i/g, i) // replace \i with zero-based index unless preceded by \
+                                                .replaceAll(/(?<!\\)\\k/g, i + 1) // replace \k with one-based index unless preceded by \
+                                                .replaceAll(/(?<!\\)\\n/g, "\n") // replace all \n with newline unless preceded by \
+                                                .replaceAll(/\\\\/g, "\\") // replace all \\ with \
+            )
         }
         switch (settings.outputNewlines) {
             case outputType.NO_NEWLINES:
@@ -91,9 +99,9 @@ function MassFormatter(props) {
 
     return (
         <div id="main">
-            <Presets setInput={presetInput} macro={macro} setMacro={setMacro}/>
+            <LeftPanel setInput={presetInput} macro={macro} setMacro={setMacro}/>
             <TextAreas input={input} setInput={setInput} output={output}/>
-            <Sidebar input={input} setInput={setInput} macro={macro} output={output} convert={convert}/>
+            <RightPanel input={input} setInput={setInput} macro={macro} output={output} convert={convert}/>
         </div>
     );
 }

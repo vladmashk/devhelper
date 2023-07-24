@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import "./Sidebar.css"
+import "./RightPanel.css"
 import Setting from "../Setting.js";
 
 export const outputType = {
@@ -8,7 +8,7 @@ export const outputType = {
     ROWS: "rows"
 }
 
-function Sidebar(props) {
+function RightPanel(props) {
 
     const [inputSeparator, setInputSeparator] = useState(",")
 
@@ -114,4 +114,4 @@ function Sidebar(props) {
     );
 }
 
-export default Sidebar;
+export default RightPanel;
