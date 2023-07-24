@@ -26,7 +26,7 @@ function RightPanel(props) {
 
     useEffect(() => {
         convert()
-    }, [inputSeparator, inputRegex, outputSeparator, quoteType, outputNewlines, rows, props.input, props.macro])
+    }, [inputSeparator, inputRegex, outputSeparator, quoteType, outputNewlines, rows, props.input, props.macro, convert])
 
     function changeInputSeparator(e) {
         setInputSeparator(e.target.value)
