@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import "./MassFormatter.css"
 import TextAreas from "./TextAreas.js";
-import RightPanel, {outputType} from "./RightPanel.js";
+import RightPanel, {outputType} from "./RightPanel/RightPanel";
 import LeftPanel from "./LeftPanel.js";
 
 export const macroChar = "%"
@@ -26,7 +26,7 @@ function MassFormatter(props) {
     const [macro, setMacro] = useState("")
 
     /**
-     * @param {{inputSeparator: string, inputRegex: boolean, quoteType: string, outputNewlines: string, rows: number, outputSeparator: string}} settings
+     * @param {{inputSeparator: string, inputRegex: boolean, extractRegex: string, quoteType: string, outputNewlines: string, rows: number, outputSeparator: string, activeInputActionTab: string}} settings
      */
     function convert(settings) {
         if (input === "") {
@@ -36,7 +36,13 @@ function MassFormatter(props) {
         let outputSep = settings.outputSeparator;
         let items;
         try {
-            items = input.split(settings.inputRegex ? new RegExp(settings.inputSeparator) : settings.inputSeparator)
+            if (settings.activeInputActionTab === "Separate") {
+                items = input.split(settings.inputRegex ? new RegExp(settings.inputSeparator) : settings.inputSeparator)
+            } else if (settings.activeInputActionTab === "Extract") {
+                items = Array.from(input.matchAll(new RegExp(settings.extractRegex, "g"))).map(m => m[1] ?? m[0])
+            } else {
+                throw new Error(`Unknown settings.activeInputActionTab: ${settings.activeInputActionTab}`);
+            }
         } catch (error) {
             if (error instanceof SyntaxError) {
                 return
