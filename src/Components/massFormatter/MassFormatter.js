@@ -6,18 +6,7 @@ import LeftPanel from "./LeftPanel.js";
 
 export const macroChar = "%"
 
-/**
- *
- * @param {string} replacement
- * @param {string} macro
- */
-// function replaceInMacro(replacement, macro) {
-//     for (let i = 0; i < macro.length; i++) {
-//         if (macro[i] === macroChar)
-//     }
-// }
-
-function MassFormatter(props) {
+function MassFormatter() {
 
     const [input, setInput] = useState("")
 
@@ -65,8 +54,8 @@ function MassFormatter(props) {
         items = items.map(i => quote + i.trim().replace(/\n/g, "") + quote)
         if (macro && macro.includes(macroChar)) {
             items = items.map((item, i) => macro.replaceAll(/(?<!\\)%/g, item) // replace % with item unless preceded by \
-                                                .replaceAll(/(?<!\\)\\i/g, i) // replace \i with zero-based index unless preceded by \
-                                                .replaceAll(/(?<!\\)\\k/g, i + 1) // replace \k with one-based index unless preceded by \
+                                                .replaceAll(/(?<!\\)\\i/g, i.toString()) // replace \i with zero-based index unless preceded by \
+                                                .replaceAll(/(?<!\\)\\k/g, (i + 1).toString()) // replace \k with one-based index unless preceded by \
                                                 .replaceAll(/(?<!\\)\\n/g, "\n") // replace all \n with newline unless preceded by \
                                                 .replaceAll(/\\\\/g, "\\") // replace all \\ with \
             )

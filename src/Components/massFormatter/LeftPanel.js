@@ -1,6 +1,7 @@
 import React from 'react';
 import './LeftPanel.css'
 import {macroChar} from "./MassFormatter.js";
+import M from "../../util/M.js";
 
 function LeftPanel(props) {
 
@@ -30,10 +31,11 @@ function LeftPanel(props) {
             <div className='helpIcon'>
                 ?
                 <div className="help">
-                    Use {macroChar} as insertion character. For example: using '{`<span>${macroChar}</span>`}' will surround every
-                    item from the input with span tags in the output. If there is a {macroChar} character in the macro that
-                    shouldn't be replaced, escape it with a backslash: \{macroChar}. Leave macro blank if not necessary. Use \i for
-                    a zero-based index. Use \k for a one-based index. Use a backslash to escape a backslash.
+                    Use <M>{macroChar}</M> as insertion character. For example: entering <M>{`<span>${macroChar}</span>`}</M> will
+                    surround every item from the input with span tags in the output. If there is a <M>{macroChar}</M> character
+                    in the macro that shouldn't be replaced, escape it with a backslash: <M>\{macroChar}</M>. Leave macro
+                    blank if not necessary. Use <M>\i</M> for a zero-based index.
+                    Use <M>\k</M> for a one-based index. Use a backslash to escape a backslash.
                 </div>
             </div>
             

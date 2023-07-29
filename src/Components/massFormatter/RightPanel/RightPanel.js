@@ -31,7 +31,8 @@ function RightPanel(props) {
 
     useEffect(() => {
         convert()
-    }, [inputSeparator, inputRegex, outputSeparator, quoteType, outputNewlines, rows, extractRegex, activeInputActionTab, props.input, props.macro, convert])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [inputSeparator, inputRegex, outputSeparator, quoteType, outputNewlines, rows, extractRegex, activeInputActionTab, props.input, props.macro])
 
     function changeInputSeparator(e) {
         setInputSeparator(e.target.value)
@@ -93,7 +94,7 @@ function RightPanel(props) {
                     {ignoreNewlines && 
                     <Setting label="Input separator: " style={{display: "flex", alignItems: "center"}}>
                         <input className="shortInput" type="text" value={inputSeparator} onChange={changeInputSeparator}/>
-                        <label className='regex'>regex<input type='checkbox' value={inputRegex} onChange={changeInputRegex}/></label>
+                        <label className='regex'>regex<input type='checkbox' checked={inputRegex} onChange={changeInputRegex}/></label>
                     </Setting>
                     }
                     <Setting label="Separate on newlines:">
@@ -106,7 +107,7 @@ function RightPanel(props) {
                         <br/>
                         <input value={extractRegex} onChange={changeExtractRegex} style={{fontSize: "1em"}}/>
                         <br/>
-                        <div style={{fontSize: "0.8em"}}>If present, first capturing group will be extracted.</div>
+                        <div style={{fontSize: "0.8em"}}>If present, the first capturing group will be extracted.</div>
                     </Setting>
                 </div>
             </div>
