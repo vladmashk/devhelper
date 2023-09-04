@@ -107,7 +107,10 @@ function RightPanel(props) {
                         <br/>
                         <input value={extractRegex} onChange={changeExtractRegex} style={{fontSize: "1em"}}/>
                         <br/>
-                        <div style={{fontSize: "0.8em"}}>If present, the first capturing group will be extracted.</div>
+                        <div style={{fontSize: "0.8em"}}>
+                            If present, the first capturing group will be extracted.
+                            Others can be used through the macro box (see question mark).
+                        </div>
                     </Setting>
                 </div>
             </div>

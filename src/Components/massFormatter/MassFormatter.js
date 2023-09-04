@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import "./MassFormatter.css"
 import TextAreas from "./TextAreas.js";
-import RightPanel, {outputType} from "./RightPanel/RightPanel";
+import RightPanel, { outputType } from "./RightPanel/RightPanel";
 import LeftPanel from "./LeftPanel.js";
 
 export const macroChar = "%"
@@ -24,11 +24,15 @@ function MassFormatter() {
         }
         let outputSep = settings.outputSeparator;
         let items;
+        let matches;
+        let subitemsPresent = false;
         try {
             if (settings.activeInputActionTab === "Separate") {
                 items = input.split(settings.inputRegex ? new RegExp(settings.inputSeparator) : settings.inputSeparator)
             } else if (settings.activeInputActionTab === "Extract") {
-                items = Array.from(input.matchAll(new RegExp(settings.extractRegex, "g"))).map(m => m[1] ?? m[0])
+                matches = Array.from(input.matchAll(new RegExp(settings.extractRegex, "g")));
+                subitemsPresent = matches.some(m => m[1]);
+                items = matches.map(m => m[1] ?? m[0]);
             } else {
                 throw new Error(`Unknown settings.activeInputActionTab: ${settings.activeInputActionTab}`);
             }
@@ -52,13 +56,20 @@ function MassFormatter() {
                 break
         }
         items = items.map(i => quote + i.trim().replace(/\n/g, "") + quote)
-        if (macro && macro.includes(macroChar)) {
-            items = items.map((item, i) => macro.replaceAll(/(?<!\\)%/g, item) // replace % with item unless preceded by \
-                                                .replaceAll(/(?<!\\)\\i/g, i.toString()) // replace \i with zero-based index unless preceded by \
-                                                .replaceAll(/(?<!\\)\\k/g, (i + 1).toString()) // replace \k with one-based index unless preceded by \
-                                                .replaceAll(/(?<!\\)\\n/g, "\n") // replace all \n with newline unless preceded by \
-                                                .replaceAll(/\\\\/g, "\\") // replace all \\ with \
-            )
+        if (macro && (macro.includes(macroChar) || /(?<!\\)\$\d/.test(macro))) {
+            items = items.map((item, i) => {
+                let result = macro.replaceAll(/(?<!\\)%/g, item) // replace % with item unless preceded by \
+                                  .replaceAll(/(?<!\\)\\i/g, i.toString()) // replace \i with zero-based index unless preceded by \
+                                  .replaceAll(/(?<!\\)\\k/g, (i + 1).toString()) // replace \k with one-based index unless preceded by \
+                                  .replaceAll(/(?<!\\)\\n/g, "\n") // replace \n with newline unless preceded by \
+                                  .replaceAll(/\\\\/g, "\\"); // replace \\ with \
+                if (subitemsPresent) {
+                    for (let j = 1; j < matches[i].length; j++) {
+                        result = result.replaceAll(new RegExp("(?<!\\\\)\\$" + j, "g"), matches[i][j]); // replace $j with jth capture group unless preceded by \
+                    }
+                }
+                return result;
+            })
         }
         switch (settings.outputNewlines) {
             case outputType.NO_NEWLINES:
@@ -94,9 +105,9 @@ function MassFormatter() {
 
     return (
         <div id="main">
-            <LeftPanel setInput={presetInput} macro={macro} setMacro={setMacro}/>
-            <TextAreas input={input} setInput={setInput} output={output}/>
-            <RightPanel input={input} setInput={setInput} macro={macro} output={output} convert={convert}/>
+            <LeftPanel setInput={presetInput} macro={macro} setMacro={setMacro} />
+            <TextAreas input={input} setInput={setInput} output={output} />
+            <RightPanel input={input} setInput={setInput} macro={macro} output={output} convert={convert} />
         </div>
     );
 }
