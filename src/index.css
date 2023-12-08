@@ -33,3 +33,14 @@ input[type='checkbox'] {
 .numberInput {
     width: 5ch;
 }
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        color-scheme: dark;
+    }
+
+    body {
+        background-color: #242526;
+        color: white;
+    }
+}

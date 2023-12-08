@@ -15,3 +15,13 @@
 .tab:hover {
     background-color: gray;
 }
+
+@media (prefers-color-scheme: dark) {
+    #tabs {
+        background-color: #131313;
+    }
+
+    .tab {
+        background-color: #6c6c6c;
+    }
+}

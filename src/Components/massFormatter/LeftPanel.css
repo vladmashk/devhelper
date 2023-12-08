@@ -45,3 +45,9 @@
 .helpIcon:hover .help {
     display: block;
 }
+
+@media (prefers-color-scheme: dark) {
+    .help {
+        background-color: #1f1f1f;
+    }
+}
