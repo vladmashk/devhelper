@@ -3,10 +3,16 @@ import "./RightPanel.css";
 import Setting from "../../Setting.js";
 import InputActionTab from './InputActionTab';
 
-export const outputType = {
+export const outputSeparation = {
     NO_NEWLINES: "noNewlines",
     NEWLINES: "newlines",
     ROWS: "rows"
+}
+
+export const outputCase = {
+    NO: "no",
+    UPPER_CASE: "upperCase",
+    LOWER_CASE: "lowerCase"
 }
 
 function RightPanel(props) {
@@ -23,7 +29,9 @@ function RightPanel(props) {
 
     const [quoteType, setQuoteType] = useState("double")
 
-    const [outputNewlines, setOutputNewlines] = useState(outputType.NO_NEWLINES)
+    const [outputNewlines, setOutputNewlines] = useState(outputSeparation.NO_NEWLINES);
+
+    const [outputChangeCase, setOutputChangeCase] = useState(outputCase.NO);
 
     const [rows, setRows] = useState(5)
 
@@ -32,7 +40,7 @@ function RightPanel(props) {
     useEffect(() => {
         convert()
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [inputSeparator, inputRegex, outputSeparator, quoteType, outputNewlines, rows, extractRegex, activeInputActionTab, props.input, props.macro])
+    }, [inputSeparator, inputRegex, outputSeparator, quoteType, outputNewlines, rows, extractRegex, outputChangeCase, activeInputActionTab, props.input, props.macro])
 
     function changeInputSeparator(e) {
         setInputSeparator(e.target.value)
@@ -64,8 +72,12 @@ function RightPanel(props) {
         setQuoteType(e.target.value)
     }
 
-    function radioChange(e) {
+    function separationRadioChange(e) {
         setOutputNewlines(e.target.value)
+    }
+
+    function changeCaseRadioChange(e) {
+        setOutputChangeCase(e.target.value)
     }
 
     function changeOutputSeparator(e) {
@@ -73,7 +85,7 @@ function RightPanel(props) {
     }
 
     function convert() {
-        props.convert({inputSeparator, inputRegex, extractRegex, quoteType, outputNewlines, rows, outputSeparator, activeInputActionTab})
+        props.convert({inputSeparator, inputRegex, extractRegex, quoteType, outputNewlines, rows, outputChangeCase, outputSeparator, activeInputActionTab})
     }
 
     function copy() {
@@ -123,17 +135,30 @@ function RightPanel(props) {
                     </select>
                 </Setting>
                 <Setting>
-                    <input id="noNewlines" type="radio" name="newlines" value={outputType.NO_NEWLINES} onChange={radioChange} defaultChecked={true}/>
+                    <input id="noNewlines" type="radio" name="newlines" value={outputSeparation.NO_NEWLINES} onChange={separationRadioChange} defaultChecked={true}/>
                     <label htmlFor="noNewlines">No newlines between items</label>
                 </Setting>
                 <Setting>
-                    <input id="newlines" type="radio" name="newlines" value={outputType.NEWLINES} onChange={radioChange}/>
+                    <input id="newlines" type="radio" name="newlines" value={outputSeparation.NEWLINES} onChange={separationRadioChange}/>
                     <label htmlFor="newlines">Newlines between items</label>
                 </Setting>
                 <Setting>
-                    <input id="rows" type="radio" name="newlines" value={outputType.ROWS} onChange={radioChange}/>
+                    <input id="rows" type="radio" name="newlines" value={outputSeparation.ROWS} onChange={separationRadioChange}/>
                     <label htmlFor="rows">Items in rows of </label>
                     <input type="number" value={rows} onChange={e => setRows(parseInt(e.target.value))} min={2} max={100} className='numberInput'/>
+                </Setting>
+                <Setting label="Change case"></Setting>
+                <Setting>
+                    <input id="noChangeCase" type="radio" name="changeCase" value={outputCase.NO} onChange={changeCaseRadioChange} defaultChecked={true}/>
+                    <label htmlFor="noChangeCase">No</label>
+                </Setting>
+                <Setting>
+                    <input id="upChangeCase" type="radio" name="changeCase" value={outputCase.UPPER_CASE} onChange={changeCaseRadioChange}/>
+                    <label htmlFor="upChangeCase">All upper case</label>
+                </Setting>
+                <Setting>
+                    <input id="loChangeCase" type="radio" name="changeCase" value={outputCase.LOWER_CASE} onChange={changeCaseRadioChange}/>
+                    <label htmlFor="loChangeCase">All lower case</label>
                 </Setting>
                 <Setting label="Output separator: ">
                     <input className="shortInput" type="text" value={outputSeparator} onChange={changeOutputSeparator}/>

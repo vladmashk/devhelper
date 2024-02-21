@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import "./MassFormatter.css"
 import TextAreas from "./TextAreas.js";
-import RightPanel, { outputType } from "./RightPanel/RightPanel";
+import RightPanel, {outputCase, outputSeparation} from "./RightPanel/RightPanel";
 import LeftPanel from "./LeftPanel.js";
 
 export const macroChar = "%"
@@ -15,7 +15,7 @@ function MassFormatter() {
     const [macro, setMacro] = useState("")
 
     /**
-     * @param {{inputSeparator: string, inputRegex: boolean, extractRegex: string, quoteType: string, outputNewlines: string, rows: number, outputSeparator: string, activeInputActionTab: string}} settings
+     * @param {{inputSeparator: string, inputRegex: boolean, extractRegex: string, quoteType: string, outputNewlines: string, rows: number, outputChangeCase: string, outputSeparator: string, activeInputActionTab: string}} settings
      */
     function convert(settings) {
         if (input === "") {
@@ -56,6 +56,11 @@ function MassFormatter() {
                 break
         }
         items = items.map(i => quote + i.trim().replace(/\n/g, "") + quote)
+        if (settings.outputChangeCase === outputCase.UPPER_CASE) {
+            items = items.map(i => i.toUpperCase());
+        } else if (settings.outputChangeCase === outputCase.LOWER_CASE) {
+            items = items.map(i => i.toLowerCase());
+        }
         if (macro && (macro.includes(macroChar) || /(?<!\\)\$\d/.test(macro))) {
             items = items.map((item, i) => {
                 let result = macro.replaceAll(/(?<!\\)%/g, item) // replace % with item unless preceded by \
@@ -72,13 +77,13 @@ function MassFormatter() {
             })
         }
         switch (settings.outputNewlines) {
-            case outputType.NO_NEWLINES:
+            case outputSeparation.NO_NEWLINES:
                 items = items.join(outputSep)
                 break
-            case outputType.NEWLINES:
+            case outputSeparation.NEWLINES:
                 items = items.join(outputSep + "\n")
                 break
-            case outputType.ROWS:
+            case outputSeparation.ROWS:
                 items = items.reduce((previous, current, index) => {
                     if (index === items.length - 1) {
                         return previous + current
