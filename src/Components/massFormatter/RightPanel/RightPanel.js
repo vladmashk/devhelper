@@ -126,7 +126,7 @@ function RightPanel(props) {
                     </Setting>
                 </div>
             </div>
-            <div className="settingsGroup">
+            <div className="settingsGroup" style={{marginTop: 30}}>
                 <Setting label="Output quotes type: ">
                     <select value={quoteType} onChange={changeQuoteType}>
                         <option value="single">Single</option>
