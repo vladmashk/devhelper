@@ -5,14 +5,8 @@ import M from "../../util/M.js";
 
 function LeftPanel(props) {
 
-
-
     function alphabetLower() {
         props.setInput("a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z")
-    }
-
-    function alphabetUpper() {
-        props.setInput("A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z")
     }
 
     function decimals() {
@@ -22,8 +16,7 @@ function LeftPanel(props) {
     return (
         <div className="presets">
             <span className="preset">Presets</span>
-            <button className="preset" onClick={alphabetLower}>Alphabet - lower case</button>
-            <button className="preset" onClick={alphabetUpper}>Alphabet - upper case</button>
+            <button className="preset" onClick={alphabetLower}>Alphabet</button>
             <button className="preset" onClick={decimals}>Decimals</button>
             <br/>
             <span className="preset">Macro</span>
