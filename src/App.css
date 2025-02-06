@@ -13,7 +13,7 @@ main {
     grid-template-rows: 1fr 1fr;
     grid-template-columns: 4fr 9fr 4fr;
     gap: 15px;
-    padding-bottom: 10px;
+    padding-bottom: 20px;
 }
 
 .options {
