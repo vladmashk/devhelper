@@ -1,0 +1,17 @@
+.macro {
+    align-items: flex-start;
+}
+
+.macro input {
+    font-family: monospace;
+}
+
+.macroExplanation {
+    margin-top: 10px;
+    font-size: 0.9em;
+}
+
+code {
+    font-weight: bold;
+    font-size: 1.1em;
+}

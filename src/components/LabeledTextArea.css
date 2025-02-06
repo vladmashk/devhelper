@@ -1,0 +1,11 @@
+.labeledTextArea {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.labeledTextArea textarea {
+    font-family: monospace;
+    resize: none;
+    flex-grow: 1;
+}

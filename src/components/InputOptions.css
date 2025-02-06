@@ -1,0 +1,24 @@
+.inputOptions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.inputSeparator input {
+    font-family: monospace;
+}
+
+.inputSeparatorRegex {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.inputSeparatorRegex label {
+    line-height: 1;
+}
+
+.inputSeparatorRegex input {
+    margin: 0;
+}

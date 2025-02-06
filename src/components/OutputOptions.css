@@ -1,0 +1,27 @@
+.outputOptions {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+    gap: 10px;
+    overflow: auto;
+}
+
+.outputOptions fieldset {
+    display: flex;
+    flex-direction: column;
+}
+
+.columns {
+    font-size: 0.9em;
+    flex-direction: row;
+    margin-top: 5px;
+}
+
+.columns input {
+    width: 5ch;
+}
+
+.outputSeparator input {
+    font-family: monospace;
+}
