@@ -12,6 +12,16 @@
     flex-direction: column;
 }
 
+.outputOptions input[type=radio] {
+    margin: 0;
+}
+
+.radioOption {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
 .columns {
     font-size: 0.9em;
     flex-direction: row;

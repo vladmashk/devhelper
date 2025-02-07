@@ -13,7 +13,7 @@ export default function OutputOptions({state, dispatch, output}: {
             <fieldset className="quotesType">
                 <legend>Quotes Type</legend>
                 {Object.values(QuotesType).map(qt => (
-                    <label key={qt}>
+                    <label className="radioOption" key={qt}>
                         <input type="radio" name="quotesType" value={qt}
                                checked={state.outputFormatOptions.quotesType === qt} onChange={e => dispatch({
                             type: "changeOutputFormatOptions",
@@ -26,7 +26,7 @@ export default function OutputOptions({state, dispatch, output}: {
 
             <fieldset className="outputNewlines">
                 {Object.values(OutputNewlines).map(nl => (
-                    <label key={nl}>
+                    <label className="radioOption" key={nl}>
                         <input type="radio" name="outputNewlines" value={nl}
                                checked={state.outputFormatOptions.newlines === nl} onChange={e => dispatch({
                             type: "changeOutputFormatOptions",
@@ -50,7 +50,7 @@ export default function OutputOptions({state, dispatch, output}: {
             <fieldset className="changeCase">
                 <legend>Change Case</legend>
                 {Object.values(ChangeCase).map(cc => (
-                    <label key={cc}>
+                    <label className="radioOption" key={cc}>
                         <input type="radio" name="changeCase" value={cc}
                                checked={state.outputFormatOptions.changeCase === cc} onChange={e => dispatch({
                             type: "changeOutputFormatOptions",
