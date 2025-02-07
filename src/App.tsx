@@ -7,7 +7,9 @@ import Macro from "./components/Macro.tsx";
 import InputOptions from "./components/InputOptions.tsx";
 import OutputOptions from "./components/OutputOptions.tsx";
 
-function reducer(state: DevHelperState, action: DevHelperAction): DevHelperState {
+const STORED_STATE_KEY = "stored-state";
+
+function stateReducer(state: DevHelperState, action: DevHelperAction): DevHelperState {
     switch (action.type) {
         case "changeInput":
             return {...state, input: action.input};
@@ -20,9 +22,18 @@ function reducer(state: DevHelperState, action: DevHelperAction): DevHelperState
     }
 }
 
-export default function App() {
+function stateReducerWrapper(state: DevHelperState, action: DevHelperAction): DevHelperState {
+    const newState = stateReducer(state, action);
+    localStorage.setItem(STORED_STATE_KEY, JSON.stringify(newState));
+    return newState;
+}
 
-    const [state, dispatch] = useReducer(reducer, {
+function initializeDevHelperState() {
+    const storedState = localStorage.getItem(STORED_STATE_KEY);
+    if (storedState) {
+        return JSON.parse(storedState) as DevHelperState;
+    }
+    return {
         input: "",
         inputSeparator: {
             text: ",",
@@ -36,7 +47,12 @@ export default function App() {
             outputSeparator: ", "
         },
         macro: ""
-    });
+    };
+}
+
+export default function App() {
+
+    const [state, dispatch] = useReducer(stateReducerWrapper, null, initializeDevHelperState);
 
     const output = useMemo(() => convert(state), [state]);
 
