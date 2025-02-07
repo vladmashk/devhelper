@@ -61,7 +61,7 @@ export default function App() {
                 localStorage.setItem(STORED_STATE_KEY, JSON.stringify(state));
             }
         }, {signal: abortController.signal});
-        return abortController.abort;
+        return () => abortController.abort();
     }, [state]);
 
     const output = useMemo(() => convert(state), [state]);
