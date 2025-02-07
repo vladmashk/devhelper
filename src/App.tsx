@@ -1,6 +1,6 @@
 import "./App.css";
 import {ChangeCase, DevHelperAction, DevHelperState, OutputNewlines, QuotesType} from "./types.ts";
-import {useMemo, useReducer} from "react";
+import {useEffect, useMemo, useReducer} from "react";
 import Presets from "./components/Presets.tsx";
 import LabeledTextArea from "./components/LabeledTextArea.tsx";
 import Macro from "./components/Macro.tsx";
@@ -8,6 +8,7 @@ import InputOptions from "./components/InputOptions.tsx";
 import OutputOptions from "./components/OutputOptions.tsx";
 
 const STORED_STATE_KEY = "stored-state";
+const latestStateVersion = 1;
 
 function stateReducer(state: DevHelperState, action: DevHelperAction): DevHelperState {
     switch (action.type) {
@@ -22,18 +23,16 @@ function stateReducer(state: DevHelperState, action: DevHelperAction): DevHelper
     }
 }
 
-function stateReducerWrapper(state: DevHelperState, action: DevHelperAction): DevHelperState {
-    const newState = stateReducer(state, action);
-    localStorage.setItem(STORED_STATE_KEY, JSON.stringify(newState));
-    return newState;
-}
-
-function initializeDevHelperState() {
+function initializeDevHelperState(): DevHelperState {
     const storedState = localStorage.getItem(STORED_STATE_KEY);
     if (storedState) {
-        return JSON.parse(storedState) as DevHelperState;
+        const parsedState = JSON.parse(storedState) as DevHelperState;
+        if (parsedState.version === latestStateVersion) {
+            return parsedState;
+        }
     }
     return {
+        version: latestStateVersion,
         input: "",
         inputSeparator: {
             text: ",",
@@ -52,7 +51,18 @@ function initializeDevHelperState() {
 
 export default function App() {
 
-    const [state, dispatch] = useReducer(stateReducerWrapper, null, initializeDevHelperState);
+    const [state, dispatch] = useReducer(stateReducer, null, initializeDevHelperState);
+
+    // store state in localStorage when page becomes hidden
+    useEffect(() => {
+        const abortController = new AbortController();
+        document.addEventListener("visibilitychange", () => {
+            if (document.visibilityState === "hidden") {
+                localStorage.setItem(STORED_STATE_KEY, JSON.stringify(state));
+            }
+        }, {signal: abortController.signal});
+        return abortController.abort;
+    }, [state]);
 
     const output = useMemo(() => convert(state), [state]);
 

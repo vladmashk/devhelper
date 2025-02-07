@@ -1,4 +1,5 @@
 export interface DevHelperState {
+    version: number,
     input: string,
     inputSeparator: InputSeparator,
     outputFormatOptions: OutputFormatOptions,
