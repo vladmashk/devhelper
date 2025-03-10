@@ -148,7 +148,7 @@ function separate(input: string, separateMode: SeparateMode): string[] {
 function extract(input: string, extractMode: ExtractMode): [string[], RegExpExecArray[]] {
     if (extractMode.extractionRegex === "") return [[], []];
     const matches: RegExpExecArray[] = [];
-    const items =  [...input.matchAll(new RegExp(extractMode.extractionRegex, "g")).map((array, index) => {
+    const items =  [...input.matchAll(new RegExp(extractMode.extractionRegex, "gm")).map((array, index) => {
         matches[index] = array;
         return array[0];
     })];
