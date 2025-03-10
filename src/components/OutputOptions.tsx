@@ -63,7 +63,7 @@ export default function OutputOptions({state, dispatch, output}: {
 
             <label className="labeledInput outputSeparator">
                 Output Separator
-                <input value={state.outputFormatOptions.outputSeparator} onChange={e => dispatch({
+                <input type="search" value={state.outputFormatOptions.outputSeparator} onChange={e => dispatch({
                     type: "changeOutputFormatOptions",
                     changeOutputFormatOptions: ofo => ({...ofo, outputSeparator: e.target.value})
                 })}/>

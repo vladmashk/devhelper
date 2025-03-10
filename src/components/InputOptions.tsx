@@ -1,11 +1,15 @@
 import "./InputOptions.css";
 import {DevHelperAction, DevHelperState} from "../types.ts";
-import {ActionDispatch} from "react";
+import {ActionDispatch, useMemo} from "react";
 
 export default function InputOptions({state, dispatch}: {
     state: DevHelperState,
     dispatch: ActionDispatch<[action: DevHelperAction]>
 }) {
+
+    const showSeparateOnNewlines = useMemo(() =>
+        !(state.inputSeparator.regex && state.inputSeparator.text === "\\n"),
+        [state]);
 
     return (
         <div className="inputOptions">
@@ -15,7 +19,7 @@ export default function InputOptions({state, dispatch}: {
 
             <label className="labeledInput inputSeparator">
                 Input Separator
-                <input value={state.inputSeparator.text} onChange={e => dispatch({
+                <input type="search" value={state.inputSeparator.text} onChange={e => dispatch({
                     type: "changeInputSeparator",
                     changeInputSeparator: is => ({...is, text: e.target.value})
                 })}/>
@@ -32,12 +36,14 @@ export default function InputOptions({state, dispatch}: {
                 </label>
             </div>
 
-            <button onClick={() => dispatch({
-                type: "changeInputSeparator",
-                changeInputSeparator: () => ({text: "\\n", regex: true})
-            })}>
-                Separate on newlines
-            </button>
+            {showSeparateOnNewlines && (
+                <button onClick={() => dispatch({
+                    type: "changeInputSeparator",
+                    changeInputSeparator: () => ({text: "\\n", regex: true})
+                })}>
+                    Separate on newlines
+                </button>
+            )}
         </div>
     );
 }
