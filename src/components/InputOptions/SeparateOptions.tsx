@@ -1,4 +1,3 @@
-import "./SeparateOptions.css";
 import {DevHelperAction, SeparateMode} from "../../types.ts";
 import {ActionDispatch, useMemo} from "react";
 
@@ -12,7 +11,7 @@ export default function SeparateOptions({separateMode, dispatch}: {
 
     return (
         <>
-            <label className="labeledInput inputSeparator">
+            <label className="labeledInput">
                 Input Separator
                 <input type="search" value={separateMode.text} onChange={e => dispatch({
                     type: "changeMode",
@@ -20,7 +19,7 @@ export default function SeparateOptions({separateMode, dispatch}: {
                 })}/>
             </label>
 
-            <div className="inputSeparatorRegex">
+            <div className="labeledInputInline">
                 <input id="inputSeparatorRegexCheckbox" type="checkbox" checked={separateMode.regex}
                        onChange={e => dispatch({
                            type: "changeMode",

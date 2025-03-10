@@ -69,7 +69,7 @@ export default function App() {
                                  onChange={value => dispatch({type: "changeInput", input: value})}/>
                 <Macro macro={state.macro} dispatch={dispatch}/>
                 <LabeledTextArea label="Output" readOnly={true} value={output}/>
-                <div className="options">
+                <div className="optionsBar">
                     <InputOptions state={state} dispatch={dispatch}/>
                     <OutputOptions state={state} dispatch={dispatch} output={output}/>
                 </div>
@@ -169,9 +169,7 @@ function applyMacro(item: string, macro: string, index: number, extractMatch: Re
             default:
                 // handle %\d+ case
                 if (!match.startsWith("%")) break;
-                if (!extractMatch) {
-                    throw new Error();
-                }
+                if (!extractMatch) return match;
                 return extractMatch[parseInt(match.substring(1))] ?? match;
         }
         return match.substring(1);

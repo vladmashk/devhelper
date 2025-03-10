@@ -30,6 +30,20 @@ button {
     gap: 5px;
 }
 
+.labeledInputInline {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    label {
+        line-height: 1;
+    }
+
+    input {
+        margin: 0;
+    }
+}
+
 @media (prefers-color-scheme: dark) {
     :root {
         color-scheme: dark;

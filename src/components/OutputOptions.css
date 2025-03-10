@@ -9,33 +9,23 @@
     label {
         font-size: var(--label-font-size);
     }
-}
 
-.outputOptions fieldset {
-    display: flex;
-    flex-direction: column;
-}
+    fieldset {
+        display: flex;
+        flex-direction: column;
+    }
 
-.outputOptions input[type=radio] {
-    margin: 0;
-}
+    .columns {
+        font-size: 0.9em;
+        flex-direction: row;
+        margin-top: 5px;
 
-.radioOption {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
+        input {
+            width: 5ch;
+        }
+    }
 
-.columns {
-    font-size: 0.9em;
-    flex-direction: row;
-    margin-top: 5px;
-}
-
-.columns input {
-    width: 5ch;
-}
-
-.outputSeparator input {
-    font-family: monospace;
+    .outputSeparator input {
+        font-family: monospace;
+    }
 }

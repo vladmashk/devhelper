@@ -22,7 +22,7 @@ export default function Macro({macro, dispatch}: {
                 <ul className="macroExplanation">
                     <li>
                         Use <code>%</code> as replacement character.
-                        For example, entering <code>&lt;span&gt;%&lt;/span&gt;</code> will surround every item with span
+                        For example, <code>&lt;li&gt;%&lt;/li&gt;</code> will surround every item with li
                         tags.
                     </li>
                     <li>

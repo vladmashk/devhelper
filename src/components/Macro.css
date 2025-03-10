@@ -3,22 +3,18 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 5px;
-}
 
-.macro input {
-    font-family: monospace;
-}
+    .macroExplanation {
+        font-size: 0.9em;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
 
-.macroExplanation {
-    font-size: 0.9em;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-
-code {
-    font-weight: bold;
-    font-size: 1.1em;
+        code {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+    }
 }
