@@ -19,13 +19,22 @@ export default function Macro({macro, dispatch}: {
                 Help
             </button>
             {explanationShown && (
-                <div className="macroExplanation">
-                    For advanced formatting.<br/>
-                    Use <code>%</code> as replacement character. For example, entering <code>&lt;span&gt;%&lt;/span&gt;</code> will
-                    surround every item from the input with span tags in the output.<br/>
-                    Use <code>\i</code> for a zero-based index. Use <code>\k</code> for a one-based index.
-                    Use a backslash to escape the percent symbol and backslashes.
-                </div>
+                <ul className="macroExplanation">
+                    <li>
+                        Use <code>%</code> as replacement character.
+                        For example, entering <code>&lt;span&gt;%&lt;/span&gt;</code> will surround every item with span
+                        tags.
+                    </li>
+                    <li>
+                        Use <code>\i</code> for a zero-based index, <code>\k</code> for a one-based index.
+                    </li>
+                    <li>
+                        Use <code>%1</code>, <code>%2</code>, ... for captured groups in Extract mode.
+                    </li>
+                    <li>
+                        Use a backslash to escape the percent symbol and backslashes.
+                    </li>
+                </ul>
             )}
         </div>
     );

@@ -5,6 +5,10 @@
     align-items: flex-start;
     gap: 10px;
     overflow: auto;
+
+    label {
+        font-size: var(--label-font-size);
+    }
 }
 
 .outputOptions fieldset {

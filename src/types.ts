@@ -1,14 +1,27 @@
 export interface DevHelperState {
     input: string,
-    inputSeparator: InputSeparator,
+    mode: Mode,
     outputFormatOptions: OutputFormatOptions,
     macro: string
 }
 
-interface InputSeparator {
+export enum ModeType {
+    SEPARATE = "Separate",
+    EXTRACT = "Extract"
+}
+
+export interface SeparateMode {
+    type: ModeType.SEPARATE,
     text: string,
     regex: boolean
 }
+
+export interface ExtractMode {
+    type: ModeType.EXTRACT,
+    extractionRegex: string
+}
+
+type Mode = SeparateMode | ExtractMode;
 
 interface OutputFormatOptions {
     quotesType: QuotesType,
@@ -40,8 +53,11 @@ export type DevHelperAction = {
     type: "changeInput",
     input: string
 } | {
-    type: "changeInputSeparator",
-    changeInputSeparator: (inputSeparator: InputSeparator) => InputSeparator
+    type: "changeMode",
+    changeMode: (mode: Mode) => Mode
+} | {
+    type: "setModeDefaults",
+    modeType: ModeType
 } | {
     type: "changeOutputFormatOptions",
     changeOutputFormatOptions: (outputFormatOptions: OutputFormatOptions) => OutputFormatOptions

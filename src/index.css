@@ -1,3 +1,7 @@
+:root {
+    --label-font-size: 0.95em;
+}
+
 html {
     height: 100%;
 }

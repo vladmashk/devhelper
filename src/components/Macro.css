@@ -11,6 +11,11 @@
 
 .macroExplanation {
     font-size: 0.9em;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
 }
 
 code {

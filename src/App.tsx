@@ -1,18 +1,37 @@
 import "./App.css";
-import {ChangeCase, DevHelperAction, DevHelperState, OutputNewlines, QuotesType} from "./types.ts";
+import {
+    ChangeCase,
+    DevHelperAction,
+    DevHelperState,
+    ExtractMode,
+    ModeType,
+    OutputNewlines,
+    QuotesType,
+    SeparateMode
+} from "./types.ts";
 import {useMemo, useReducer} from "react";
 import Presets from "./components/Presets.tsx";
 import LabeledTextArea from "./components/LabeledTextArea.tsx";
 import Macro from "./components/Macro.tsx";
-import InputOptions from "./components/InputOptions.tsx";
+import InputOptions from "./components/InputOptions/InputOptions.tsx";
 import OutputOptions from "./components/OutputOptions.tsx";
+import {exhaustiveGuard} from "./util.ts";
 
 function stateReducer(state: DevHelperState, action: DevHelperAction): DevHelperState {
     switch (action.type) {
         case "changeInput":
             return {...state, input: action.input};
-        case "changeInputSeparator":
-            return {...state, inputSeparator: action.changeInputSeparator(state.inputSeparator)};
+        case "changeMode":
+            return {...state, mode: action.changeMode(state.mode)};
+        case "setModeDefaults":
+            switch (action.modeType) {
+                case ModeType.SEPARATE:
+                    return {...state, mode: {type: ModeType.SEPARATE, text: ",", regex: false}};
+                case ModeType.EXTRACT:
+                    return {...state, mode: {type: ModeType.EXTRACT, extractionRegex: "\\w+"}}
+                default:
+                    return exhaustiveGuard(action.modeType);
+            }
         case "changeOutputFormatOptions":
             return {...state, outputFormatOptions: action.changeOutputFormatOptions(state.outputFormatOptions)};
         case "changeMacro":
@@ -24,7 +43,8 @@ export default function App() {
 
     const [state, dispatch] = useReducer(stateReducer, {
         input: "",
-        inputSeparator: {
+        mode: {
+            type: ModeType.SEPARATE,
             text: ",",
             regex: false
         },
@@ -61,20 +81,32 @@ export default function App() {
 function convert(state: DevHelperState): string {
     if (state.input === "") return "";
 
-    let inputSeparator;
+    let items: string[];
+    let extractMatches: RegExpExecArray[] | undefined = undefined; // only filled in extract mode
+
     try {
-        inputSeparator = state.inputSeparator.regex ? new RegExp(state.inputSeparator.text) : state.inputSeparator.text;
-    } catch (e) { // invalid regex
+        switch (state.mode.type) {
+            case ModeType.SEPARATE:
+                items = separate(state.input, state.mode);
+                break;
+            case ModeType.EXTRACT:
+                [items, extractMatches] = extract(state.input, state.mode);
+                break;
+        }
+    } catch (e) {
+        if (e instanceof SyntaxError) { // invalid regex
+            return e.message;
+        }
+        console.error(e);
         return state.input;
     }
-    const splitInput = state.input.split(inputSeparator);
 
     let outputSeparator = state.outputFormatOptions.outputSeparator;
     if (state.outputFormatOptions.newlines === OutputNewlines.NEWLINES) {
         outputSeparator += "\n";
     }
 
-    return splitInput.reduce((accumulated, item, index) => {
+    return items.reduce((accumulated, item, index) => {
         item = item.trim();
         if (state.outputFormatOptions.changeCase === ChangeCase.LOWER) {
             item = item.toLowerCase();
@@ -82,14 +114,14 @@ function convert(state: DevHelperState): string {
             item = item.toUpperCase();
         }
 
-        item = applyMacro(item, state.macro, index);
+        item = applyMacro(item, state.macro, index, extractMatches ? extractMatches[index] : undefined);
 
         if (state.outputFormatOptions.quotesType !== QuotesType.NONE) {
             const quote = state.outputFormatOptions.quotesType === QuotesType.DOUBLE ? '"' : "'";
             item = quote + item + quote;
         }
 
-        if (index !== splitInput.length - 1) {
+        if (index !== items.length - 1) {
             item += outputSeparator;
             if (state.outputFormatOptions.newlines === OutputNewlines.COLUMNS) {
                 const columns = state.outputFormatOptions.columns;
@@ -102,9 +134,30 @@ function convert(state: DevHelperState): string {
     }, "");
 }
 
-function applyMacro(item: string, macro: string, index: number): string {
+/**
+ * @throws SyntaxError if regex invalid
+ */
+function separate(input: string, separateMode: SeparateMode): string[] {
+    const inputSeparator = separateMode.regex ? new RegExp(separateMode.text) : separateMode.text;
+    return input.split(inputSeparator);
+}
+
+/**
+ * @throws SyntaxError if regex invalid
+ */
+function extract(input: string, extractMode: ExtractMode): [string[], RegExpExecArray[]] {
+    if (extractMode.extractionRegex === "") return [[], []];
+    const matches: RegExpExecArray[] = [];
+    const items =  [...input.matchAll(new RegExp(extractMode.extractionRegex, "g")).map((array, index) => {
+        matches[index] = array;
+        return array[0];
+    })];
+    return [items, matches];
+}
+
+function applyMacro(item: string, macro: string, index: number, extractMatch: RegExpExecArray | undefined): string {
     if (macro === "") return item;
-    const matchRegex = /\\?(%|\\i|\\k)/g;
+    const matchRegex = /\\?(?:%\d*|\\i|\\k)/g;
     return macro.replaceAll(matchRegex, match => {
         switch (match) {
             case "%":
@@ -114,7 +167,13 @@ function applyMacro(item: string, macro: string, index: number): string {
             case "\\k":
                 return (index + 1).toString();
             default:
-                return match.substring(1);
+                // handle %\d+ case
+                if (!match.startsWith("%")) break;
+                if (!extractMatch) {
+                    throw new Error();
+                }
+                return extractMatch[parseInt(match.substring(1))] ?? match;
         }
+        return match.substring(1);
     });
 }
