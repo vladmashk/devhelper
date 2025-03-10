@@ -13,7 +13,7 @@ export default function Macro({macro, dispatch}: {
         <div className="macro">
             <label className="labeledInput">
                 Macro
-                <input value={macro} onChange={e => dispatch({type: "changeMacro", macro: e.target.value})}/>
+                <textarea value={macro} onChange={e => dispatch({type: "changeMacro", macro: e.target.value})}/>
             </label>
             <button onClick={() => setExplanationShown(es => !es)}>
                 Help
