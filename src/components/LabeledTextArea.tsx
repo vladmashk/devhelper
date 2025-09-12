@@ -10,7 +10,7 @@ export default function LabeledTextArea({label, readOnly, value, onChange}: {
     return (
         <label className="labeledTextArea">
             {label}
-            <textarea readOnly={readOnly} value={value}
+            <textarea readOnly={readOnly} value={value} autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck="false"
                       onChange={onChange ? e => onChange(e.target.value) : undefined}/>
         </label>
     );
